@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>ProjectPerfectus</artifactId>
+    <artifactId>ProfectusRH</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ProjectPerfectus</name>
-    <description>ProjectPerfectus</description>
+    <name>ProfectusBackend</name>
+    <description>ProfectusBackend</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -63,7 +63,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -125,7 +124,6 @@
             <version>3.4.1</version>
         </dependency>
     </dependencies>
-
 
     <build>
         <plugins>
