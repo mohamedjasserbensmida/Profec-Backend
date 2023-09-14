@@ -1,9 +1,12 @@
 package com.example.ProfectusBackend.controllers;
 
+import com.example.ProfectusBackend.entities.Departement;
 import com.example.ProfectusBackend.entities.User;
 import com.example.ProfectusBackend.entities.changePwd;
 import com.example.ProfectusBackend.interfaces.IUserService;
+import com.example.ProfectusBackend.repositories.DepartementRepo;
 import com.example.ProfectusBackend.repositories.UserRepository;
+import com.example.ProfectusBackend.services.DepartementService;
 import com.example.ProfectusBackend.services.EmailServiceImpl;
 import com.example.ProfectusBackend.utils.PagingHeaders;
 import com.example.ProfectusBackend.utils.PagingResponse;
@@ -30,6 +33,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -42,6 +46,8 @@ public class UserController {
     IUserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DepartementRepo departementRepo;
     private final PasswordEncoder passwordEncoder;
 
     public UserController(PasswordEncoder passwordEncoder) {
@@ -83,6 +89,7 @@ public class UserController {
         return new ResponseEntity<>(response.getElements(), returnHttpHeaders(response), HttpStatus.OK);
 
     }
+
 
     public HttpHeaders returnHttpHeaders(PagingResponse response) {
         HttpHeaders headers = new HttpHeaders();
@@ -143,6 +150,36 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+
+
+    @PostMapping("/assign-employee-to-department/{employeeId}/{departmentId}")
+    public ResponseEntity<String> assignEmployeeToDepartment(
+            @PathVariable("employeeId") Long employeeId,
+            @PathVariable("departmentId") Long departmentId
+    ) {
+        User employee = userRepository.findById(employeeId).orElse(null);
+        Departement department = departementRepo.findById(departmentId).orElse(null);
+        if (employee == null || department == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employé ou département non trouvé");
+        }
+        employee.setDepartement(department);
+        department.getUsers().add(employee);
+        userRepository.save(employee);
+        departementRepo.save(department);
+        return ResponseEntity.ok("Employé affecté au département avec succès");
+    }
+
+    @GetMapping("/daysSinceCreation/{userId}")
+    public ResponseEntity<Long> getDaysSinceCreation(@PathVariable Long userId) {
+        long daysSinceCreation = userService.calculateDaysSinceAccountCreationForEmployee(userId);
+        return ResponseEntity.ok(daysSinceCreation);
+    }
+
+    @GetMapping("/employees")
+    public ResponseEntity<List<User>> getEmployees() {
+        List<User> employees = userService.findEmployees();
+        return ResponseEntity.ok(employees);
+    }
 
     @DeleteMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable (value = "id") Long id){

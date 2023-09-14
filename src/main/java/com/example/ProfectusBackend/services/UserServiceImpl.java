@@ -1,5 +1,7 @@
 package com.example.ProfectusBackend.services;
 
+import com.example.ProfectusBackend.entities.Departement;
+import com.example.ProfectusBackend.entities.Role;
 import com.example.ProfectusBackend.entities.User;
 import com.example.ProfectusBackend.entities.changePwd;
 import com.example.ProfectusBackend.interfaces.IUserService;
@@ -17,14 +19,21 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
 public class UserServiceImpl implements IUserService {
     @Autowired
     UserRepository ur;
+
+    private List<User> userList;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -126,4 +135,25 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+    @Override
+    public List<User> findEmployees() {
+        return ur.findByRole(Role.employee);
+
+    }
+
+
+
+    @Override
+    public long calculateDaysSinceAccountCreationForEmployee(Long userId) {
+        User user = ur.findById(userId).orElse(null);
+        if (user != null && user.getRole() == Role.employee) {
+            LocalDate creationDate = user.getDateCreation().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            LocalDate currentDate = LocalDate.now();
+            Period period = Period.between(creationDate, currentDate);
+            return period.getDays();
+        }
+        return 0;
+    }
 }

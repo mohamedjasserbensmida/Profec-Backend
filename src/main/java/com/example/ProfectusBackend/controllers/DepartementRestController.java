@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(value = "*")
+@CrossOrigin("*")
 public class DepartementRestController {
 
     @Autowired
@@ -24,6 +24,11 @@ public class DepartementRestController {
         depart.setDepartementName(d.getDepartementName());
         this.departementService.createDepartement(depart);
     }
+    @DeleteMapping("departements/{id}")
+    public void deleteDepartements(@PathVariable (value = "id") Long id){departementService.deleteDepartement(id);
+    }
+    @PostMapping("updateDepartements")
+    public Departement updateClient(Departement d){return  departementService.updateDepartement(d); }
 
     @GetMapping("/departements")
     List<Departement> getDepartements(){
@@ -35,3 +40,4 @@ public class DepartementRestController {
      return this.departementService.findOneDepartment(id);
     }
 }
+    

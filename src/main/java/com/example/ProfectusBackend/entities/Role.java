@@ -1,6 +1,6 @@
-package com.example.ProfectusBackend.entities;
+    package com.example.ProfectusBackend.entities;
 
-public enum Role {
-    admin,employee
+    public enum Role {
+        admin,employee
 
-}
+    }
