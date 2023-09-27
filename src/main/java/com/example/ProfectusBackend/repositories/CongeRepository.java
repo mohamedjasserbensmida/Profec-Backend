@@ -12,6 +12,6 @@ public interface CongeRepository extends JpaRepository<Conge, Long> {
     // Méthodes supplémentaires si nécessaire
 
     @Query(value = "select * from conges where user_id=?1",nativeQuery = true)
-    List<Conge> getPrincipalReclamation(Long id);
+    List<Conge> getPrincipalConge(Long id);
 }
 

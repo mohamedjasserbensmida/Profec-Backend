@@ -22,45 +22,45 @@ public class CongeServiceImpl {
     }
 
 
-    public List<Conge> getPrincipalReclamations(Long id){
-        return congeRepository.getPrincipalReclamation(id);
+    public List<Conge> getPrincipalConges(Long id){
+        return congeRepository.getPrincipalConge(id);
     }
 
 
-    public List<Conge> getAllReclamations() {
+    public List<Conge> getAllConges() {
         return congeRepository.findAll();
     }
 
-    public Conge getReclamationById(Long id) {
+    public Conge getCongeById(Long id) {
         return congeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Réclamation non trouvée"));
     }
 
-    public Conge createReclamation(Conge conge) {
+    public Conge createConge(Conge conge) {
         return congeRepository.save(conge);
     }
 
-    public String updateReclamation(Conge conge) {
+    public String updateConge(Conge conge) {
         Conge existingConge = congeRepository.findById(conge.getId()).get();
         existingConge.setTypeConge(conge.getTypeConge());
         existingConge.setDescription(conge.getDescription());
          congeRepository.save(existingConge);
-         return "Reclamation Updated";
+         return "Conge Updated";
     }
 
-    public String deleteReclamation(Long id) {
-        Conge conge = getReclamationById(id);
+    public String deleteConge(Long id) {
+        Conge conge = getCongeById(id);
         congeRepository.delete(conge);
-        return "Reclamation Deleted";
+        return "Conge Deleted";
     }
 
 
-    public String addNewReclamation(Conge conge, Long id){
+    public String addNewConge(Conge conge, Long id){
         User user=userRepository.findById(id).get();
         conge.setUser(user);
         conge.setEmail(user.getEmailUser());
         congeRepository.save(conge);
-        return "Reclamation Saved";
+        return "Conge Saved";
     }
 
 }
